@@ -45,13 +45,11 @@ class FireManager {
       }
 
       console.log(Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1].latitude));
-      if (Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1].latitude) > 0.01125) {
-        console.log("pushing");
+      if (Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1].latitude) > 0.009009 &&
+        Math.abs(sortedGovFires[i].longitude - sortedGovFires[i + 1].longitude) > 0.01125) {
         filteredGovFires.push(sortedGovFires[i]);
       }
     }
-// 88.9km = 1 deg;
-// 1km = 0.01125 deg
 
     this._govFires = govFires;
   }
