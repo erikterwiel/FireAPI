@@ -26,22 +26,22 @@ class FireManager {
         });
     });
 
-    await new Promise(resolve => {
-      fs.createReadStream("./data/VNP14IMGTDL_NRT_USA_contiguous_and_Hawaii_24h.csv")
-        .pipe(parser())
-        .on("data", row => {
-          const { latitude, longitude, acq_date: updatedDate } = row;
-          govFires.push({
-            latitude,
-            longitude,
-            radius: 375,
-            updatedDate,
-          });
-        })
-        .on("end", () => {
-          resolve();
-        });
-    });
+    // await new Promise(resolve => {
+    //   fs.createReadStream("./data/VNP14IMGTDL_NRT_USA_contiguous_and_Hawaii_24h.csv")
+    //     .pipe(parser())
+    //     .on("data", row => {
+    //       const { latitude, longitude, acq_date: updatedDate } = row;
+    //       govFires.push({
+    //         latitude,
+    //         longitude,
+    //         radius: 375,
+    //         updatedDate,
+    //       });
+    //     })
+    //     .on("end", () => {
+    //       resolve();
+    //     });
+    // });
 
     this._govFires = govFires;
   }
