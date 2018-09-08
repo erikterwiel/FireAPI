@@ -1,9 +1,12 @@
 const fs = require("fs");
-const parser = require("csv-parser");
+const csvParser = require("csv-parser");
+const RssParser = require("rss-parser");
 
 class FireManager {
   constructor() {
     this._govFires = undefined;
+    this._govIncidents = undefined;
+    this._rssParser = new RssParser({ customFields: { item: ["geo:lat", "geo:long" ]} });
   }
 
   async initialize() {
@@ -11,10 +14,9 @@ class FireManager {
 
     await new Promise(resolve => {
       fs.createReadStream("./data/MODIS_C6_USA_contiguous_and_Hawaii_24h.csv")
-        .pipe(parser())
+        .pipe(csvParser())
         .on("data", row => {
           const { latitude, longitude, acq_date: updatedDate } = row;
-
           govFires.push({
             latitude,
             longitude,
@@ -51,14 +53,27 @@ class FireManager {
     }
 
     this._govFires = filteredGovFires;
+
+    const rawIncidents = await this._rssParser.parseURL("https://inciweb.nwcg.gov/feeds/rss/incidents/");
+    this._govIncidents = rawIncidents.items.map(rawIncident => {
+      const { title, "geo:lat": latitude, "geo:long": longitude, content, pubDate: date } = rawIncident;
+      return {
+        title,
+        latitude,
+        longitude,
+        content,
+        date,
+      };
+    });
   }
 
 
   async getAllFires() {
-    const fires = JSON.parse(JSON.stringify(this._govFires));
+    const circles = JSON.parse(JSON.stringify(this._govFires));
+    const markers = JSON.parse(JSON.stringify(this._govIncidents));
     return {
       status: 200,
-      json: fires,
+      json: { circles, markers },
     };
   }
 }
