@@ -44,14 +44,13 @@ class FireManager {
         break;
       }
 
-      console.log(Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1].latitude));
       if (Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1].latitude) > 0.009009 &&
         Math.abs(sortedGovFires[i].longitude - sortedGovFires[i + 1].longitude) > 0.01125) {
         filteredGovFires.push(sortedGovFires[i]);
       }
     }
 
-    this._govFires = govFires;
+    this._govFires = filteredGovFires;
   }
 
 
