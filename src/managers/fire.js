@@ -18,8 +18,8 @@ class FireManager {
         .on("data", row => {
           const { latitude, longitude, acq_date: updatedDate } = row;
           govFires.push({
-            latitude,
-            longitude,
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
             radius: 1000,
             updatedDate,
           });
@@ -59,8 +59,8 @@ class FireManager {
       const { title, "geo:lat": latitude, "geo:long": longitude, content, pubDate: date } = rawIncident;
       return {
         title,
-        latitude,
-        longitude,
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude),
         content,
         date,
       };
