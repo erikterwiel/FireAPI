@@ -41,17 +41,17 @@ class FireManager {
     for (let i = 0; i < sortedGovFires.length; i++) {
       if (i === sortedGovFires.length - 1) {
         filteredGovFires.push(sortedGovFires[i]);
-        return;
+        break;
       }
 
-      if (Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1]) > 0.01125) {
+      console.log(Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1].latitude));
+      if (Math.abs(sortedGovFires[i].latitude - sortedGovFires[i + 1].latitude) > 0.01125) {
+        console.log("pushing");
         filteredGovFires.push(sortedGovFires[i]);
       }
     }
 // 88.9km = 1 deg;
 // 1km = 0.01125 deg
-
-
 
     this._govFires = govFires;
   }
