@@ -4,8 +4,8 @@ const RssParser = require("rss-parser");
 const AWS = require("aws-sdk");
 
 AWS.config.update({
-  accessKeyId: require("../constants/accessKeyId"),
-  secretAccessKey: require("../constants/secretAccessKey"),
+  accessKeyId: process.env.AWS_KEY || require("../constants/accessKeyId"),
+  secretAccessKey: process.env.AWS_SECRET_KEY || require("../constants/secretAccessKey"),
   region: "us-east-1"
 });
 
