@@ -1,10 +1,18 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const http = require("http");
 const bottle = require("./bottle");
 
 const fireRoutes = require("./routes/fire");
+const authRoutes = require("./routes/auth");
 
 const app = express();
+
+mongoose.connect(`mongodb://${process.env.DOMAIN || "localhost:27017"}/fire`, { useNewUrlParser: true });
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -17,6 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/fire", fireRoutes);
+app.use("/auth", authRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
