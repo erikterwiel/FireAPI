@@ -10,7 +10,7 @@ class AuthManager {
 
   async signup(user) {
     const { email, password } = user;
-    if (this._userService.find(email)) {
+    if (await this._userService.find(email)) {
       return {
         status: 500,
         json: { error: "Email already exists" },
@@ -34,7 +34,7 @@ class AuthManager {
 
   async login(credentials) {
     const { email, password } = credentials;
-    const user = this._userService.find(email);
+    const user = await this._userService.find(email);
     if (!user) {
       return {
         status: 404,

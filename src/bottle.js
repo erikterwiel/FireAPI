@@ -7,7 +7,7 @@ const FireManager = require("./managers/fire");
 const bottle = new Bottle();
 
 bottle.service("userService", UserService);
-bottle.service("authManager", AuthManager, "authService");
+bottle.service("authManager", AuthManager, "userService");
 bottle.service("fireManager", FireManager);
 
 module.exports = bottle.container;

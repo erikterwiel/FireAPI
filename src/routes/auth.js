@@ -3,19 +3,19 @@ const bottle = require("../bottle");
 
 const router = express.Router();
 
-router.get("/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const result = await bottle.authManager.signup(req.body);
   const { status, json } = result;
   res.status(status).json(json);
 });
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const result = await bottle.authManager.login(req.body);
   const { status, json } = result;
   res.status(status).json(json);
 });
 
-router.get("/verify", async (req, res) => {
+router.post ("/verify", async (req, res) => {
   const result = await bottle.authManager.verify(req.body.token);
   const { status, json } = result;
   res.status(status).json(json);
