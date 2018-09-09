@@ -9,7 +9,7 @@ const bottle = new Bottle();
 
 bottle.service("userService", UserService);
 bottle.service("authManager", AuthManager, "userService");
-bottle.service("fireManager", FireManager);
+bottle.service("fireManager", FireManager, "userService");
 bottle.service("userManager", UserManager, "userService");
 
 module.exports = bottle.container;

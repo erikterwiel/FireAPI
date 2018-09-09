@@ -9,7 +9,7 @@ class AuthManager {
   }
 
   async signup(user) {
-    const { email, password } = user;
+    const { email, password, properties } = user;
     if (await this._userService.find(email)) {
       return {
         status: 500,
@@ -20,6 +20,7 @@ class AuthManager {
       _id: new mongoose.Types.ObjectId(),
       email,
       password,
+      properties,
     });
     await this._userService.create(newUser);
     const token = await this._getToken(email);

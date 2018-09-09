@@ -9,4 +9,10 @@ router.get("/", async (req, res) => {
   res.status(status).json(json);
 });
 
+router.post("/", async (req, res) => {
+  const result = await bottle.fireManager.reportFire(req.body);
+  const { status, json } = result;
+  res.status(status).json(json);
+});
+
 module.exports = router;

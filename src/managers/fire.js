@@ -1,12 +1,20 @@
 const fs = require("fs");
 const csvParser = require("csv-parser");
 const RssParser = require("rss-parser");
+const AWS = require("aws-sdk");
+
+AWS.config.update({
+  accessKeyId: require("../constants/accessKeyId"),
+  secretAccessKey: require("../constants/secretAccessKey"),
+  region: "us-east-1"
+});
 
 class FireManager {
-  constructor() {
+  constructor(userService) {
     this._govFires = undefined;
     this._govIncidents = undefined;
     this._rssParser = new RssParser({ customFields: { item: ["geo:lat", "geo:long" ]} });
+    this._userService = userService;
   }
 
   async initialize() {
@@ -75,6 +83,41 @@ class FireManager {
       status: 200,
       json: { circles, markers },
     };
+  }
+
+  async reportFire({ latitude, longitude, email }) {
+    const users = await this._userService.get();
+    users.forEach(user => {
+      user.properties.forEach(property => {
+        if (Math.abs(property.latitude - latitude) < 0.1 || Math.abs(property.longitude - longitude) < 0.1) {
+          this._sendAlert({
+            propertyEmail: user.email,
+            property,
+            latitude,
+            longitude,
+            issuer: email,
+          });
+        }
+      })
+    });
+    return {
+      status: 200,
+      json: {},
+    }
+  }
+
+  async _sendAlert({ propertyEmail, property, latitude, longitude, issuer }) {
+    const params = {
+      Subject: `${property.title} Threatened By Fire!`,
+      Message: `${propertyEmail}, your property "${property.title}" is being endangered by a forest fire at coordinates ${latitude}, ${longitude}, discovered by ${issuer}!`,
+      TopicArn: "arn:aws:sns:us-east-1:132885165810:fire",
+    };
+    try {
+      const publishText = await new AWS.SNS({ apiVersion: "2010-03-31" }).publish(params).promise();
+      console.log("success", publishText);
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 }
 
