@@ -4,8 +4,7 @@ const userSchema = mongoose.Schema({
   _id: { type: mongoose.Schema.Types.ObjectId, required: true, auto: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  addressLatitude: { type: Number, required: false },
-  addressLongitude: { type: Number, required: false },
+  properties: { type: [{}], required: true },
 });
 
 module.exports = mongoose.model("User", userSchema);

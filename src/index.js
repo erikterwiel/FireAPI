@@ -6,6 +6,7 @@ const bottle = require("./bottle");
 
 const fireRoutes = require("./routes/fire");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 app.use("/fire", fireRoutes);
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
