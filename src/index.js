@@ -9,7 +9,10 @@ const authRoutes = require("./routes/auth");
 
 const app = express();
 
-mongoose.connect(`mongodb://${process.env.DOMAIN || "localhost:27017"}/fire`, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI
+  || `mongodb://${process.env.DOMAIN 
+  || "localhost:27017"}/fire`, { useNewUrlParser: true });
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
